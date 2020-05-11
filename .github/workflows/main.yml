@@ -1,0 +1,21 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting:memorygamejs
+        env:
+          FIREBASE_TOKEN: 1//0g4navRXL33XgCgYIARAAGBASNwF-L9IrpmxbUcfWFyfKs3VCgVCKJo0NclyN_evArMiLWTsyt97bdw6LzXkY2qe0vbhKZdLOSL0
