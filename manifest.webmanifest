@@ -1,0 +1,17 @@
+{
+    "short_name": "Memory Game",
+    "name": "Memory",
+    "icons": [
+      {
+        "src": "https://adjetter-web.s3.us-east-2.amazonaws.com/kapture-crm-app/kap_logo_512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#333",
+    "description": "A memory game.",
+    "background_color": "#ffffff"
+  }
+  
