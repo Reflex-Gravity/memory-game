@@ -1,7 +1,55 @@
+:root {
+    --main-bg: #160140;
+    --main-color:#fff;
+}
+
 body {
-    font-family: Roboto, sans-serif;
+    font-family: Lato, Roboto, sans-serif;
+    background-color: var(--main-bg);
+    color: var(--main-color);
+}
+
+#wrapper {
+    max-width: 800px;
+    margin: auto;
+    padding: 10px;
+}
+
+.title {
+    color: rgb(253, 183, 91);
+    font-size: 2rem;
+    text-align: center;
+    text-decoration: underline;
 }
 
 main {
+    border: 2px solid #000;
+}
+
+main > #arena {
+    display: grid;
+    /* grid-template-columns: auto auto auto auto; */
+    /* min-height: 300px; */
+    grid-gap: 10px;
+}
+
+main .box {
     
+}
+main .box.red {
+    background-color: #ff5555;
+    transition: .3s all;
+}
+
+main .box.blue {
+    background-color: #24a0ed;
+    transition: .3s all;
+}
+
+.button {
+    border: 1px solid #fff;
+    background-color: var(--main-bg);
+    color: var(--main-color);
+    padding: 5px;
+    cursor: pointer;
 }

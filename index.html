@@ -8,12 +8,25 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Memory Game Under construction</h1>
-
-    <main id="game-app">
-
-    </main>
-    
+    <noscript>This app needs javascript to run. Please enable it and reload.</noscript>
+    <div id="wrapper">
+        <h1 class="title">Guess Memory</h1>
+        <div class="instructions">
+            <h4>Instructions:</h4>
+            <ul>
+                <li>You can select the difficulty level.</li>
+                <li>This is a memory game. You need to remember the boxes which are RED.</li>
+                <li>After few seconds all boxes will turn white. Now is the time you need to select the boxes which were red.</li>
+                <li>If you click a box which was BLUE, you lose.</li>
+                <li>There's be counter running and you should guess all the red boxes before it finishes.</li>
+            </ul>
+        </div>
+        <button class="button" id="restart-btn">Restart Game</button>
+        <main id="game-app">
+            <div id="arena"></div>
+            <div id="options-modal"></div>
+        </main>
+    </div>
     <script src="js/main.js"></script>
 </body>
 </html>
