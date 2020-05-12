@@ -18,4 +18,4 @@ jobs:
         with:
           args: deploy --only hosting:memorygamejs
         env:
-          FIREBASE_TOKEN: 1//0g4navRXL33XgCgYIARAAGBASNwF-L9IrpmxbUcfWFyfKs3VCgVCKJo0NclyN_evArMiLWTsyt97bdw6LzXkY2qe0vbhKZdLOSL0
+          FIREBASE_TOKEN: ${{secrets.FIREBASE_JOELDSOUZA}}
