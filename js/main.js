@@ -15,12 +15,20 @@
      }
      
      // Define GameEngine
-     var gameEngine = function() {
+     var gameEngine = function(m, n) {
+
+        const s = 10; // 10 seconds to guess.
+
+        const r = 10;
      
+     }
+
+     function renderLayout() {
+
      }
      
      
-     var Game = new gameEngine(13)
+     var Game = new gameEngine(5,5)
      
      renderGame()
  }
