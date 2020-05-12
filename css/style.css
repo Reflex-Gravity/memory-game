@@ -108,14 +108,22 @@ main .box:hover {
     transition: .3s all;
 }
 
+#result {
+    font-size: 3rem;
+    font-weight: 600;
+    color: #000;
+    text-shadow: 2px 2px #ff5555;
+    margin-bottom: 10px;
+}
+
+#result.won {
+    text-shadow: 2px 2px #24a0ed;
+}
+
 /* Generic CSS */
 
 .flex {
     display: flex;
-}
-
-.hide {
-    display: none;
 }
 
 .modal {
@@ -127,6 +135,10 @@ main .box:hover {
     background: rgba(195, 189, 132, 0.541);
     transition: .3s all;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+.hide {
+    display: none;
 }
