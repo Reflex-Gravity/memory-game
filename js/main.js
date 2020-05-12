@@ -99,6 +99,14 @@
         this.startGame()
     };
 
+    this.clearBoxes = function() {
+        var boxes = document.querySelectorAll(".box")
+        boxes.forEach( _box => {
+            _box.classList.remove('red')
+            _box.classList.remove('blue')
+        })
+    }
+
     /**
      * Displays the option modal.
      *
@@ -114,6 +122,19 @@
 
     };
 
+    this.restartGame = function() {
+        this.resetGame()
+        this.generateSquares()
+    };
+
+    this.resetGame = function(){
+        // Clears the layout, Resets all counters.
+        
+        clearInterval(this.counterListener)
+        clearTimeout(this.gameCountDown)
+        this.counterListener = 0
+    };
+    
     this.startCountdown = function() {
 
         clearTimeout(this.freezeTimeout)
@@ -129,20 +150,12 @@
         }, this.maxTime)
     };
 
-    this.resetGame = function(){
-        // Clears the layout, Resets all counters.
-        
-        clearInterval(this.counterListener)
-        clearTimeout(this.gameCountDown)
-        this.counterListener = 0
-    };
-
     this.startGame = function() {
         // Handles the game countdown.
         this.freezeTimeout = setTimeout(() => {
-            // this.clearDashboard()
+            this.clearBoxes()
             this.startCountdown()
-        }, 1000);
+        }, 1500);
     };
     
     this.showModal = function(modal) {
@@ -153,7 +166,7 @@
     this.registerEvents = function() {
         // Register all events here.
         let restartBtn = document.getElementById("restart-btn")
-        restartBtn.addEventListener("click", () => this.resetGame())
+        restartBtn.addEventListener("click", () => this.restartGame())
     };
 }
 

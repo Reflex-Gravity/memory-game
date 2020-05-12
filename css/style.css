@@ -39,16 +39,21 @@ main > #arena {
 }
 
 main .box {
-    
+    background-color: #fff;
+    transition: .3s all;
+    cursor: pointer;
 }
+
 main .box.red {
     background-color: #ff5555;
-    transition: .3s all;
 }
 
 main .box.blue {
     background-color: #24a0ed;
-    transition: .3s all;
+}
+
+main .box:hover {
+    box-shadow: 0px 0px 20px -5px #fff;
 }
 
 .button {
