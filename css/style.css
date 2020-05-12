@@ -55,12 +55,12 @@ main .box.blue {
     border:0;
     background-color: var(--main-color);
     color: var(--main-bg);
-    padding: 10px 5px;
+    padding: 10px;
+    border-radius: 2px;
     cursor: pointer;
     transition: .3s all;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
-    
 }
 
 .button:hover {
@@ -72,10 +72,16 @@ main .box.blue {
     justify-content: space-around;
 }
 
-.counter {
+#counter {
     background-color: var(--yellow-color);
     color: #000;
-
+    text-align: center;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    transition: .3s all;
+    border-radius: 5px;
+    width: 50px;
 }
 
 /* Generic CSS */
