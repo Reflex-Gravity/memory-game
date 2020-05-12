@@ -2,6 +2,8 @@
 
 A memory test game built on vanilla javascript.
 
+Here's the [demo]("https://memorygame.joeldsouza.me/")
+
 ## Rules
 
 You play the game as follows:
