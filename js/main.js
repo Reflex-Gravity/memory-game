@@ -3,15 +3,14 @@
  */
 
  var GameEngine = {
-    init: function(difficulty) {
+    init: function(difficulty="medium") {
         // Initialize
-
         // Default
         this.getDifficulty(difficulty)
         this.m = 5;
         this.n = 5;
         this.minColoredSquare = 3;
-        this.maxTime = 10;
+        this.maxTime = 10000; // Total ms to finish a game.
         this.gameArena = document.getElementById("arena")
         this.modalEl = document.getElementById("options-modal")
         this.startGame()
@@ -39,12 +38,13 @@
         // The brain of the game.
         this.totalSquares = this.m * this.n;
         this.coloredSquares = [];
+        this.resetGame()
         //Get random squares to be red.
-        for(let start=0; start<=this.totalSquares; start++) {
+        for(let start=0; start<=this.totalSquares/2; start++) {
 
             this.coloredSquares = [
                 ...this.coloredSquares,
-                Math.floor(Math.random() * (this.totalSquares/2 - this.minColoredSquare)) + this.minColoredSquare
+                Math.floor(Math.random() * this.totalSquares) + this.minColoredSquare
             ];
         }
 
@@ -54,10 +54,14 @@
         // Render the game layout
         let boxEl = ''
         for(let start=0; start<=this.totalSquares; start++) {
-            boxEl += `<div class="box ${this.coloredSquares.includes(start) ? 'red' : 'blue'}"></div>`
+            boxEl += `<div
+                        class="box ${this.coloredSquares.includes(start) ? 'red' : 'blue'}"
+                        data-val="${start}"
+                      ></div>`
         }
 
-        const boxDim = (this.gameArena.clientWidth - (10*(this.m-1)))/this.m
+        // Calculate the dimensions of each box i.e: (Total )
+        const boxDim = (this.gameArena.clientWidth - (10 * this.m))/this.m
         
         this.gameArena.style.gridTemplateRows = `repeat(${this.m}, ${boxDim}px)`
         this.gameArena.style.gridTemplateColumns = `repeat(${this.n}, ${boxDim}px)`
@@ -72,20 +76,24 @@
         let restartModal = `<div class=""></div>`
 
      },
-     clearGame: function(){
-        // Clears the layout.
+     resetGame: function(){
+        // Clears the layout, Resets all counters.
         this.gameArena.innerHTML="";
+     },
+     handleCounter: function() {
+        // Handles the game countdown.
+        setTimeout(() => {
+            
+        }, this.maxTime);
      },
      showModal: function(modal) {
         
         this.modalEl.innerHTML(modal)
      },
-     registerEvents: function() {
-        //  Register all the events
-        document.addEventListener("click", renderOptions)
-        document.addEventListener("click")
-     } 
 };
 
 // Load the game
 GameEngine.init("medium")
+
+var restartBtn = document.getElementById("restart-btn")
+restartBtn.addEventListener("click", ()=>{GameEngine.init()})
