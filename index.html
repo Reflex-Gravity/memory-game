@@ -22,12 +22,23 @@
             </ul>
         </div>
         <div class="panel flex">
-            <button class="button" id="restart-btn">Restart Game</button>
+            <div id="message">Game starts in 1</div>
             <div id="counter"></div>
         </div>
         <main id="game-app">
             <div id="arena"></div>
-            <div id="options-modal"></div>
+            <div class="modal" id="options-modal">
+                <div id="result"></div>
+                <div class="flex options-menu">
+                    <button class="button" id="restart-btn">Retry</button>
+                    <button class="button" id="start-btn">Start Game</button>
+                    <select class="dropdown" id="difficulty" id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+            </div>
         </main>
     </div>
     <script src="js/main.js"></script>

@@ -3,35 +3,51 @@
  */
 
  function GameEngine (){
-    this.init = function(difficulty="medium") {
+
+    //  Private variables
+    var coloredSquares = []
+    var selectedSquares = []
+    var maxWaitTime = 3000; // Maximum buffer time.
+    
+    this.init = function() {
         
-        // Initialize
-        // Default
-        this.getDifficulty(difficulty)
-        this.m = 5;
-        this.n = 5;
-        this.maxTime = 10000; // Total ms to finish a game.
-        this.totalSquares = this.m * this.n;
-        this.minColoredSquare = 3;
+        // Initialize the game
 
         // Get elements 
         this.gameArena = document.getElementById("arena")
         this.modalEl = document.getElementById("options-modal")
         this.counterEl = document.getElementById("counter")
+        this.resultEl = document.getElementById("result")
+        this.startBtn = document.getElementById("start-btn")
+        this.restartBtn = document.getElementById("restart-btn")
 
         this.registerEvents()
+    };
+    
+    this.beginGame = function () {
+        // Reset all values.
+        this.resetGame();
+        [this.m, this.n] = this.getDifficulty()
+        this.maxTime = 10000; // Total ms to finish a game.
+        this.totalSquares = this.m * this.n;
+        this.minColoredSquare = 3;
 
         // Creates a new game
-        this.generateSquares()
-    };
+        this.generateRedSquares()
+        this.renderLayout()
+        this.initiateGame()
+    }
+
     /**
      * Returns the grid size based on a difficulty level.
      *
      * @param {String} difficulty
      * @returns {Array} gridSize
      */
-    this.getDifficulty = function(difficulty) {
-        
+    this.getDifficulty = function() {
+
+        let difficulty = document.getElementById("difficulty").value
+
         switch (difficulty) {
             case 'easy':
                 return [3,3]
@@ -57,21 +73,20 @@
      *  Generates red sqaures.
      *
      */
-    this.generateSquares = function() {
+    this.generateRedSquares = function() {
         
         // The brain of the game.
-        this.coloredSquares = [];
+        coloredSquares = [];
 
         //Randomly select the red squares.
         for(let start=0; start<=this.totalSquares/2; start++) {
 
-            this.coloredSquares = [
-                ...this.coloredSquares,
+            coloredSquares = [
+                ...coloredSquares,
                 Math.floor(Math.random() * this.totalSquares) + this.minColoredSquare
             ];
         }
-
-        this.renderLayout()
+        console.log('coloredSquares', coloredSquares)
     };
 
     /**
@@ -82,10 +97,11 @@
         
         // Render the game layout
         let boxEl = ''
-        for(let start=0; start<=this.totalSquares; start++) {
+        for(let boxId=0; boxId<=this.totalSquares; boxId++) {
             boxEl += `<div
-                        class="box ${this.coloredSquares.includes(start) ? 'red' : 'blue'}"
-                        data-val="${start}"
+                        class="box ${coloredSquares.includes(boxId) ? 'red' : 'blue'}"
+                        data-val="${boxId}"
+                        onclick="window.GameInst.validateGuess(${boxId})"
                     ></div>`
         }
 
@@ -95,54 +111,32 @@
         this.gameArena.style.gridTemplateRows = `repeat(${this.m}, ${boxDim}px)`
         this.gameArena.style.gridTemplateColumns = `repeat(${this.n}, ${boxDim}px)`
         this.gameArena.innerHTML = boxEl;
-
-        this.startGame()
     };
-
-    this.clearBoxes = function() {
-        var boxes = document.querySelectorAll(".box")
-        boxes.forEach( _box => {
-            _box.classList.remove('red')
-            _box.classList.remove('blue')
-        })
-    }
 
     /**
-     * Displays the option modal.
+     * The game begins here
      *
      */
-    this.showOptions = function() {
-        
-        //  Show the options modal
-        let messageModal = `<div class="modal-wrapper">
-                            <span>${message}</span>
-                        </div>`;
-
-        let restartModal = `<div class=""></div>`
-
+    this.initiateGame = function() {
+        this.freezeTimeout = setTimeout(() => {
+            this.clearBoxes()
+            this.startCountdown()
+        }, maxWaitTime);
     };
 
-    this.restartGame = function() {
-        this.resetGame()
-        this.generateSquares()
-    };
-
-    this.resetGame = function(){
-        // Clears the layout, Resets all counters.
-        
-        clearInterval(this.counterListener)
-        clearTimeout(this.gameCountDown)
-        this.counterListener = 0
-    };
-    
+    /**
+     * Starts the game countdown
+     *
+     */
     this.startCountdown = function() {
+        
 
         clearTimeout(this.freezeTimeout)
 
-        var countdown = 10
+        var countdown = 11
         this.counterListener = setInterval(() => {
-            this.counterEl.innerText = countdown;
             countdown =countdown-1;
+            this.counterEl.innerText = countdown;
         }, 1000);
 
         this.gameCountDown = setTimeout(()=>{
@@ -150,26 +144,69 @@
         }, this.maxTime)
     };
 
-    this.startGame = function() {
-        // Handles the game countdown.
-        this.freezeTimeout = setTimeout(() => {
-            this.clearBoxes()
-            this.startCountdown()
-        }, 1500);
-    };
-    
-    this.showModal = function(modal) {
+    /**
+     * Checks if the clicked box is a red or a blue square.
+     *
+     */
+    this.validateGuess = function( boxId ) {
+        if(coloredSquares.includes(boxId)) {
+            selectedSquares = [...selectedSquares, boxId]
+        } else {
+            this.showModal('Game Over!')
+        }
+    }
+
+    /**
+     * Turns all boxes into white.
+     *
+     */
+    this.clearBoxes = function() {
         
-        this.modalEl.innerHTML(modal)
+        var boxes = document.querySelectorAll(".box")
+        boxes.forEach( _box => {
+            _box.classList.remove('red')
+            _box.classList.remove('blue')
+            _box.classList.add('white')
+        })
+    }
+
+    /**
+     * Displays the option modal.
+     *
+     */
+    this.showModal = function(message) {
+        
+        //  Show the options modal
+        let messageModal = `<div class="modal-wrapper">
+                                <span>${message}</span>
+                            </div>`;
+        this.resultEl.innerHTML = messageModal
+        this.modalEl.classList.remove('hide')
+
+    };
+
+    this.restartGame = function() {
+        this.modalEl.classList.add('hide')
+        this.beginGame()
+    }
+
+    this.resetGame = function(){
+        // Clears the layout, Resets all counters.
+        clearInterval(this.counterListener)
+        clearTimeout(this.gameCountDown)
+        coloredSquares = []
+        selectedSquares = []
+        this.counterEl.innerText = ''
+        this.modalEl.classList.add('hide')
     };
 
     this.registerEvents = function() {
         // Register all events here.
-        let restartBtn = document.getElementById("restart-btn")
-        restartBtn.addEventListener("click", () => this.restartGame())
+        this.startBtn.addEventListener("click", () => this.beginGame())
+        this.restartBtn.addEventListener("click", () => this.restartGame())
     };
 }
 
 // Load the game
-var GameInst = new GameEngine()
-GameInst.init("medium")
+window.GameInst = new GameEngine()
+window.GameInst.init()
