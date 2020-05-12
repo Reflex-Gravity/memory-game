@@ -101,7 +101,7 @@ main .box:hover {
     width: 80%;
 }
 
-#message {
+#notice {
     font-size: 20px;
     font-weight: bolder;
     color: #ff5555;
