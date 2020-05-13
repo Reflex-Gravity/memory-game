@@ -9,9 +9,10 @@ function GameEngine() {
     var selectedSquares = []
     var maxWaitTime = 3000; // Maximum buffer time.
     var isDisabledClicks = true;
+    // var isDummyState = true;
 
-    const GAME_OVER_MSG = 'Game Over!';
-    const GAME_WIN_MSG = 'Congrats. You Won!'
+    const GAME_OVER_MSG = 'Game Over';
+    const GAME_WIN_MSG = 'Congrats. You Won'
 
     this.init = function () {
 
@@ -23,21 +24,28 @@ function GameEngine() {
         this.noticeEl = document.getElementById("notice")
         this.startBtn = document.getElementById("start-btn")
         this.quitBtn = document.getElementById("quit-btn")
+        this.difficultySel = document.getElementById("difficulty")
 
         this.registerEvents()
+
+        // Generate dummy grid.
+        this.beginGame(false)
+
     };
 
-    this.beginGame = function () {
+    this.beginGame = function (startGame = true) {
         // Reset all values.
-        this.resetGame();
+        startGame && this.resetGame();
+
         ;[this.m, this.n] = this.getDifficulty()
         this.maxTime = 4000; // Total ms to finish a game.
         this.totalSquares = this.m * this.n;
         this.minColoredSquare = 3;
 
         // Starts game logic.
-        this.renderGame()
-        this.initiateGame()
+        this.renderGame(startGame)
+
+        startGame && this.initiateGame()
     }
 
     /**
@@ -48,7 +56,7 @@ function GameEngine() {
      */
     this.getDifficulty = function () {
 
-        let difficulty = document.getElementById("difficulty").value
+        let difficulty = this.difficultySel.value
 
         switch (difficulty) {
             case 'easy':
@@ -64,9 +72,9 @@ function GameEngine() {
 
     /**
      * Generates and Renders the grid layout.
-     *
+     *  @param {Boolean} isDummyState
      */
-    this.renderGame = function () {
+    this.renderGame = function (gamePlayState = true) {
 
         // Render the game layout
         let boxEl = ''
@@ -75,20 +83,23 @@ function GameEngine() {
         for (let boxId = 1; boxId <= this.totalSquares; boxId++) {
             let isRed = false;
 
-            // Generate a random number between totalSquares and minSquares.
-            const randomBoxId = Math.floor(Math.random() * (this.totalSquares - (this.minColoredSquare + 1))) + this.minColoredSquare;
-
-            // If the random num is even, then it's a red box.
-            if(randomBoxId%2 == 0) {
-                coloredSquares = [
-                    ...coloredSquares,
-                    boxId
-                ];
-                isRed = true
+            if(gamePlayState) {
+                
+                // Generate a random number between totalSquares and minSquares.
+                const randomBoxId = Math.floor(Math.random() * (this.totalSquares - (this.minColoredSquare + 1))) + this.minColoredSquare;
+    
+                // If the random num is even, then it's a red box.
+                if(randomBoxId%2 == 0) {
+                    coloredSquares = [
+                        ...coloredSquares,
+                        boxId
+                    ];
+                    isRed = true
+                }
             }
 
             boxEl += `<div
-                        class="box ${isRed ? 'red' : 'blue'}"
+                        class="box ${ isRed ? 'red' : 'blue'}"
                         data-val="${boxId}"
                         onclick="window.GameInst.validateGuess(this, ${boxId})"
                     ></div>`
@@ -107,13 +118,13 @@ function GameEngine() {
      *
      */
     this.initiateGame = function () {
-
+        
         let countdown = maxWaitTime/1000;
-        this.noticeEl.innerHTML = `Game starts in ${countdown}`
+        this.noticeEl.innerHTML = `${countdown}`
         
         // Update the wait notice.
         let waitCountdown = setInterval(() => {
-            this.noticeEl.innerHTML = `Game starts in ${countdown}`
+            this.noticeEl.innerHTML = `${countdown}`
             countdown = countdown - 1;
         }, 1000);
 
@@ -136,6 +147,7 @@ function GameEngine() {
 
         clearTimeout(this.waitTimeout)
         this.quitBtn.classList.remove('hide')
+        this.counterEl.classList.remove('hide')
 
         var countdown = this.maxTime/1000
         this.counterListener = setInterval(() => {
@@ -161,11 +173,17 @@ function GameEngine() {
             selectedSquares = [...selectedSquares, boxId]
             boxEl.classList.add('red')
             boxEl.removeAttribute('onclick')
+
+            // If all squares are selected.
+            if(coloredSquares.length === selectedSquares.length) {
+                this.stopGame()
+            }
+
         } else {
             this.stopGame()
         }
         
-    }
+    };
 
     /**
      * Called after a game stops.
@@ -175,6 +193,7 @@ function GameEngine() {
         let isWon = false
         // Hide the quit button
         this.quitBtn.classList.add('hide')
+        this.counterEl.classList.add('hide')
 
         if (Array.isArray(selectedSquares)) {
             if (selectedSquares.length === coloredSquares.length) {
@@ -197,6 +216,7 @@ function GameEngine() {
             this.showModal(GAME_OVER_MSG, false)
         }
         
+        isDummyState = true
         this.clearAllTimers()
     }
 
@@ -270,6 +290,7 @@ function GameEngine() {
         // Register all events here.
         this.startBtn.addEventListener("click", () => this.beginGame())
         this.quitBtn.addEventListener("click", () => this.stopGame())
+        this.difficultySel.addEventListener("change", () => this.beginGame(false))
     };
 }
 

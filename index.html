@@ -10,20 +10,12 @@
 <body>
     <noscript>This app needs javascript to run. Please enable it and reload.</noscript>
     <div id="wrapper">
-        <h1 class="title">Guess Memory</h1>
+        <h1 class="title">MemoryGame</h1>
         <div class="instructions">
-            <h4>Instructions:</h4>
-            <ul>
-                <li>You can select the difficulty level.</li>
-                <li>This is a memory game. You need to remember the boxes which are RED.</li>
-                <li>After few seconds all boxes will turn white. Now is the time you need to select the boxes which were red.</li>
-                <li>If you click a box which was BLUE, you lose.</li>
-                <li>There'll be a counter running and you should guess all the red boxes before it finishes.</li>
-            </ul>
+            <p>Remember all the RED boxes and select them when the countdown starts.</p>
         </div>
         <div class="panel flex">
-            <div id="notice"></div>
-            <div id="counter"></div>
+            <div class="hide" id="counter"></div>
             <button class="button hide" id="quit-btn">Quit</button>
         </div>
         <main id="game-app">
@@ -40,6 +32,7 @@
                 </div>
             </div>
         </main>
+        <div id="notice"></div>
     </div>
     <script src="js/main.js"></script>
 </body>
