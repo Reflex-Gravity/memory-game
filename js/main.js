@@ -38,7 +38,7 @@ function GameEngine() {
         startGame && this.resetGame();
 
         ;[this.m, this.n] = this.getDifficulty()
-        this.maxTime = 4000; // Total ms to finish a game.
+        this.maxTime = 10000; // Total ms to finish a game.
         this.totalSquares = this.m * this.n;
         this.minColoredSquare = 3;
 
