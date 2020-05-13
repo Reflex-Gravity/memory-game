@@ -119,24 +119,26 @@ function GameEngine() {
      */
     this.initiateGame = function () {
         
-        let countdown = maxWaitTime/1000;
-        this.noticeEl.innerHTML = `${countdown}`
-        
-        // Update the wait notice.
+        let countdown = maxWaitTime/1000;      
+        this.noticeEl.innerHTML = `${countdown}`  
+
+        // Start the wait countdown
         let waitCountdown = setInterval(() => {
             countdown = countdown - 1;
             this.noticeEl.innerHTML = `${countdown}`
+
+            // Start the game countdown
+            if(countdown === 0) {
+                this.noticeEl.innerHTML = `Go!!`
+                clearInterval(waitCountdown)
+                this.noticeEl.innerHTML = ''
+                this.startCountdown()
+                this.clearBoxes()
+                // Enable clicks on the boxes
+                isDisabledClicks = false;
+            }
         }, 1000);
 
-        // Start the countdown after buffer time. 
-        this.waitTimeout = setTimeout(() => {
-            clearInterval(waitCountdown)
-            this.noticeEl.innerHTML = ''
-            this.clearBoxes()
-            // Enable clicks on the boxes
-            isDisabledClicks = false;
-            this.startCountdown()
-        }, maxWaitTime);
     };
 
     /**
@@ -145,20 +147,22 @@ function GameEngine() {
      */
     this.startCountdown = function () {
 
-        clearTimeout(this.waitTimeout)
+        var countdown = this.maxTime/1000
+
         this.quitBtn.classList.remove('hide')
         this.counterEl.classList.remove('hide')
+        this.counterEl.innerText = countdown;
 
-        var countdown = this.maxTime/1000
         this.counterListener = setInterval(() => {
             countdown = countdown - 1;
             this.counterEl.innerText = countdown;
-        }, 1000);
 
-        // Game ends after maxTime
-        this.gameCountDown = setTimeout(() => {
-            this.stopGame()
-        }, this.maxTime)
+            // Time's up.
+            if(countdown === 0) {
+                clearInterval(this.counterListener)
+                this.stopGame()
+            }
+        }, 1000);
     };
 
     /**
@@ -254,8 +258,6 @@ function GameEngine() {
     this.clearAllTimers = function() {
         // Clear all timers
         clearInterval(this.counterListener)
-        clearTimeout(this.gameCountDown)
-        clearTimeout(this.waitTimeout)
         clearInterval(this.waitCountdown)
     }
 
