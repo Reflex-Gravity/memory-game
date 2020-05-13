@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Game</title>
+    <meta name="description" content="A memory game for the brain.">
+    <meta name="keywords" content="JS Game, Memory game, game, brain games,">
+    <meta name="theme-color" content="#160140">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="manifest" href="/manifest.webmanifest">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -24,7 +28,7 @@
                 <div id="result"></div>
                 <div class="flex options-menu">
                     <button class="button" id="start-btn">Start Game</button>
-                    <select class="dropdown" id="difficulty" id="difficulty">
+                    <select class="dropdown" name="difficulty" id="difficulty">
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
                         <option value="hard">Hard</option>
@@ -35,5 +39,16 @@
         <div id="notice"></div>
     </div>
     <script src="js/main.js"></script>
+    <script>
+        // Register service worker.
+        if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((reg) => {
+                    console.log('Service worker registered.', reg);
+                });
+        });
+        }
+    </script>
 </body>
 </html>
