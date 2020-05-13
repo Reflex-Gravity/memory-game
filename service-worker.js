@@ -1,4 +1,4 @@
-var cacheName = 'memory-game-v1.1';
+var cacheName = 'memory-game-v1.2';
 var filesToCache = [
   '/',
   '/index.html',

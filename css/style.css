@@ -13,10 +13,11 @@ html, body {
     margin: 0;
 }
 
-p {
-    font-size: 20px;
+.instructions p {
+    font-size: 18px;
     font-weight: 600;
     color: #ff5555;
+    text-align: center;
 }
 
 #wrapper {
@@ -27,13 +28,9 @@ p {
 
 .title {
     color: var(--yellow-color);
-    font-size: 2rem;
+    font-size: 3rem;
     text-align: center;
-    text-decoration: underline;
-}
-
-.instructions {
-    text-align: center;
+    /* text-decoration: underline; */
 }
 
 main {
@@ -164,4 +161,10 @@ main .box.white:hover {
 
 .invisible {
     visibility: hidden;
+}
+
+@media only screen and (max-width: 500px) {
+    .wrapper {
+        width: 100%
+    }
 }
