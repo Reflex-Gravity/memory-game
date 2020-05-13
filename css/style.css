@@ -94,6 +94,9 @@ main .box.white:hover {
 
 .dropdown {
     background-color: #fff;
+    font-weight: 600;
+    border: 0;
+    color: var(--main-bg);
 }
 
 .options-menu {
@@ -111,7 +114,7 @@ main .box.white:hover {
 #result {
     font-size: 3rem;
     font-weight: 600;
-    color: #000;
+    color: #fff;
     text-shadow: 2px 2px #ff5555;
     margin-bottom: 10px;
 }
@@ -132,7 +135,7 @@ main .box.white:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(195, 189, 132, 0.541);
+    background: rgba(0, 0, 0, 0.86);
     transition: .3s all;
     display: flex;
     flex-direction: column;

@@ -10,18 +10,19 @@ function GameEngine() {
     var maxWaitTime = 3000; // Maximum buffer time.
     var isDisabledClicks = true;
 
+    const GAME_OVER_MSG = 'Game Over!';
+    const GAME_WIN_MSG = 'Congrats. You Won!'
+
     this.init = function () {
 
-        // Initialize the game
-
-        // Get elements 
+        // Define all the elements 
         this.gameArena = document.getElementById("arena")
         this.modalEl = document.getElementById("options-modal")
         this.counterEl = document.getElementById("counter")
         this.resultEl = document.getElementById("result")
         this.noticeEl = document.getElementById("notice")
         this.startBtn = document.getElementById("start-btn")
-        this.restartBtn = document.getElementById("restart-btn")
+        this.quitBtn = document.getElementById("quit-btn")
 
         this.registerEvents()
     };
@@ -106,16 +107,18 @@ function GameEngine() {
      *
      */
     this.initiateGame = function () {
-        
-        // The countdown timer before game
+
         let countdown = maxWaitTime/1000;
         this.noticeEl.innerHTML = `Game starts in ${countdown}`
+        
+        // Update the wait notice.
         let waitCountdown = setInterval(() => {
             this.noticeEl.innerHTML = `Game starts in ${countdown}`
             countdown = countdown - 1;
         }, 1000);
 
-        this.freezeTimeout = setTimeout(() => {
+        // Start the countdown after buffer time. 
+        this.waitTimeout = setTimeout(() => {
             clearInterval(waitCountdown)
             this.noticeEl.innerHTML = ''
             this.clearBoxes()
@@ -131,15 +134,16 @@ function GameEngine() {
      */
     this.startCountdown = function () {
 
+        clearTimeout(this.waitTimeout)
+        this.quitBtn.classList.remove('hide')
 
-        clearTimeout(this.freezeTimeout)
-
-        var countdown = 10
+        var countdown = this.maxTime/1000
         this.counterListener = setInterval(() => {
             countdown = countdown - 1;
             this.counterEl.innerText = countdown;
         }, 1000);
 
+        // Game ends after maxTime
         this.gameCountDown = setTimeout(() => {
             this.stopGame()
         }, this.maxTime)
@@ -169,12 +173,14 @@ function GameEngine() {
      */
     this.stopGame = function () {
         let isWon = false
-        
+        // Hide the quit button
+        this.quitBtn.classList.add('hide')
+
         if (Array.isArray(selectedSquares)) {
             if (selectedSquares.length === coloredSquares.length) {
                 for (const _boxId of coloredSquares) {
                     if (!selectedSquares.includes(_boxId)) {
-                        this.showModal('Game Over!', false)
+                        this.showModal(GAME_OVER_MSG, false)
                         break;
                     } else {
                         isWon = true
@@ -186,12 +192,12 @@ function GameEngine() {
         }
 
         if(isWon) {
-            this.showModal('Congrats. You Won!', true)
+            this.showModal(GAME_WIN_MSG, true)
         } else{
-            this.showModal('Game Over!', false)
+            this.showModal(GAME_OVER_MSG, false)
         }
-        clearInterval(this.counterListener)
-        clearTimeout(this.gameCountDown)
+        
+        this.clearAllTimers()
     }
 
     /**
@@ -225,10 +231,13 @@ function GameEngine() {
 
     };
 
-    this.restartGame = function () {
-        this.modalEl.classList.add('hide')
-        this.beginGame()
-    };
+    this.clearAllTimers = function() {
+        // Clear all timers
+        clearInterval(this.counterListener)
+        clearTimeout(this.gameCountDown)
+        clearTimeout(this.waitTimeout)
+        clearInterval(this.waitCountdown)
+    }
 
     /**
      * Clears the layout, Resets all counters.
@@ -236,9 +245,7 @@ function GameEngine() {
      */
     this.resetGame = function () {
 
-        // Clear all timers
-        clearInterval(this.counterListener)
-        clearTimeout(this.gameCountDown)
+        this.clearAllTimers()
 
         // Set default values
         coloredSquares = []
@@ -254,12 +261,15 @@ function GameEngine() {
         // Set default classes
         this.modalEl.classList.add('hide')
         this.resultEl.classList.remove('won')
+
+        // Hide start btn and show retry button.
+        this.startBtn.innerText = 'Retry'
     };
 
     this.registerEvents = function () {
         // Register all events here.
         this.startBtn.addEventListener("click", () => this.beginGame())
-        this.restartBtn.addEventListener("click", () => this.restartGame())
+        this.quitBtn.addEventListener("click", () => this.stopGame())
     };
 }
 
