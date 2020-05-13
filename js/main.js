@@ -124,8 +124,8 @@ function GameEngine() {
         
         // Update the wait notice.
         let waitCountdown = setInterval(() => {
-            this.noticeEl.innerHTML = `${countdown}`
             countdown = countdown - 1;
+            this.noticeEl.innerHTML = `${countdown}`
         }, 1000);
 
         // Start the countdown after buffer time. 
