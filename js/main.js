@@ -34,9 +34,8 @@ function GameEngine() {
         this.totalSquares = this.m * this.n;
         this.minColoredSquare = 3;
 
-        // Creates a new game
-        this.generateRedSquares()
-        this.renderLayout()
+        // Starts game logic.
+        this.renderGame()
         this.initiateGame()
     }
 
@@ -61,52 +60,34 @@ function GameEngine() {
                 return [5, 5]
         }
     };
-    /**
-     *
-     *
-     */
-    this.renderGame = function () {
-
-        // Render the changes to the dom.
-        let el = document.getElementById("game-app")
-        el.innerHTML = "Game renders here"
-    };
-    /**
-     *  Generates red sqaures.
-     *
-     */
-    this.generateRedSquares = function () {
-
-        // The brain of the game.
-        coloredSquares = [];
-
-        //Randomly select the red squares.
-        for (let start = 0; start <= this.totalSquares / 2; start++) {
-
-            // Generate a random number between two numbers.
-            const randomBoxId = Math.floor(Math.random() * (this.totalSquares - (this.minColoredSquare + 1))) + this.minColoredSquare;
-
-            if(!coloredSquares.includes(randomBoxId)) {
-                coloredSquares = [
-                    ...coloredSquares,
-                    randomBoxId
-                ];
-            }
-        }
-        
-    };
 
     /**
      * Generates and Renders the grid layout.
      *
      */
-    this.renderLayout = function () {
+    this.renderGame = function () {
 
         // Render the game layout
         let boxEl = ''
+        coloredSquares = [];
+        
         for (let boxId = 1; boxId <= this.totalSquares; boxId++) {
+            let isRed = false;
+
+            // Generate a random number between totalSquares and minSquares.
+            const randomBoxId = Math.floor(Math.random() * (this.totalSquares - (this.minColoredSquare + 1))) + this.minColoredSquare;
+
+            // If the random num is even, then it's a red box.
+            if(randomBoxId%2 == 0) {
+                coloredSquares = [
+                    ...coloredSquares,
+                    boxId
+                ];
+                isRed = true
+            }
+
             boxEl += `<div
-                        class="box ${coloredSquares.includes(boxId) ? 'red' : 'blue'}"
+                        class="box ${isRed ? 'red' : 'blue'}"
                         data-val="${boxId}"
                         onclick="window.GameInst.validateGuess(this, ${boxId})"
                     ></div>`

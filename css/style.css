@@ -54,7 +54,7 @@ main .box.blue {
     background-color: #24a0ed;
 }
 
-main .box:hover {
+main .box.white:hover {
     box-shadow: 0px 0px 20px -5px #fff;
 }
 
